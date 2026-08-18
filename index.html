@@ -1,0 +1,2429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PUJO ELO — A Kolkata Puja Memory</title>
+
+  <meta
+    name="description"
+    content="A nostalgic interactive Kolkata Durga Puja experience."
+  >
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Libre+Franklin:wght@400;600;800;900&family=Noto+Serif+Bengali:wght@500;700&family=Pacifico&display=swap');
+
+    :root {
+      --red: #a52f27;
+      --deep-red: #651d1b;
+      --cream: #f5e5bd;
+      --paper: #ead4a1;
+      --gold: #d2a33a;
+      --dark-gold: #9b7124;
+      --green: #304b3b;
+      --charcoal: #211d1a;
+      --brown: #6d4631;
+      --white: #fff2d2;
+      --shadow: rgba(0,0,0,.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--charcoal);
+      font-family: "Libre Franklin", sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Vintage film grain */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      pointer-events: none;
+      opacity: .09;
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          rgba(0,0,0,.15) 0px,
+          rgba(0,0,0,.15) 1px,
+          transparent 1px,
+          transparent 4px
+        );
+      mix-blend-mode: multiply;
+    }
+
+    /* ---------------- NAVBAR ---------------- */
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      border-bottom: 2px solid var(--charcoal);
+      background: rgba(245,229,189,.94);
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-container {
+      width: min(1180px, 92%);
+      height: 70px;
+      margin: auto;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      font-family: "DM Mono", monospace;
+      font-size: .8rem;
+      font-weight: bold;
+      letter-spacing: .08em;
+    }
+
+    .logo-box {
+      padding: 9px 11px;
+      background: var(--red);
+      color: var(--cream);
+      border: 2px solid var(--charcoal);
+      box-shadow: 3px 3px 0 var(--charcoal);
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 25px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--charcoal);
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    nav a:hover {
+      color: var(--red);
+    }
+
+    /* ---------------- HERO ---------------- */
+
+    .hero {
+      min-height: 100vh;
+      padding-top: 70px;
+
+      position: relative;
+      overflow: hidden;
+
+      background:
+        radial-gradient(circle at 70% 25%, rgba(210,163,58,.45), transparent 22%),
+        radial-gradient(circle at 20% 70%, rgba(165,47,39,.13), transparent 30%),
+        linear-gradient(
+          120deg,
+          #f4e4bc,
+          #dfc387 45%,
+          #d1a64f
+        );
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+
+      background:
+        linear-gradient(
+          transparent 95%,
+          rgba(33,29,26,.15) 96%
+        );
+
+      background-size: 100% 6px;
+      opacity: .2;
+      pointer-events: none;
+    }
+
+    .hero-container {
+      width: min(1180px, 92%);
+      min-height: calc(100vh - 70px);
+      margin: auto;
+
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .hero-text {
+      position: relative;
+      z-index: 5;
+    }
+
+    .eyebrow {
+      display: inline-block;
+
+      padding: 8px 12px;
+
+      border: 2px solid var(--charcoal);
+      background: var(--paper);
+      box-shadow: 4px 4px 0 var(--charcoal);
+
+      font-family: "DM Mono", monospace;
+      font-size: .7rem;
+      letter-spacing: .1em;
+
+      margin-bottom: 25px;
+    }
+
+    .eyebrow span {
+      color: var(--red);
+    }
+
+    .hero h1 {
+      font-size: clamp(4rem, 10vw, 9rem);
+      line-height: .78;
+      letter-spacing: -.08em;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+
+    .hero h1 span {
+      display: block;
+      color: var(--red);
+    }
+
+    .bengali-title {
+      margin-top: 25px;
+
+      font-family: "Noto Serif Bengali", serif;
+      font-size: clamp(1.7rem, 4vw, 3rem);
+      color: var(--green);
+
+      transform: rotate(-3deg);
+      display: inline-block;
+    }
+
+    .hero-description {
+      max-width: 520px;
+      margin-top: 20px;
+
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    .hero-buttons {
+      margin-top: 28px;
+
+      display: flex;
+      flex-wrap: wrap;
+      gap: 13px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 13px 18px;
+
+      border: 2px solid var(--charcoal);
+      box-shadow: 4px 4px 0 var(--charcoal);
+
+      text-decoration: none;
+
+      font-family: "DM Mono", monospace;
+      font-size: .7rem;
+
+      transition: .2s;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      transform: translate(3px,3px);
+      box-shadow: 1px 1px 0 var(--charcoal);
+    }
+
+    .btn-red {
+      background: var(--red);
+      color: white;
+    }
+
+    .btn-paper {
+      background: var(--paper);
+      color: var(--charcoal);
+    }
+
+    /* ---------------- DURGA SVG ---------------- */
+
+    .durga-stage {
+      position: relative;
+      height: 650px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .halo {
+      width: 480px;
+      height: 480px;
+
+      border-radius: 50%;
+
+      position: absolute;
+
+      background:
+        repeating-conic-gradient(
+          from 0deg,
+          var(--gold) 0deg 5deg,
+          transparent 5deg 12deg
+        );
+
+      opacity: .5;
+
+      animation: rotateHalo 30s linear infinite;
+    }
+
+    @keyframes rotateHalo {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .durga-art {
+      width: min(500px,90%);
+      position: relative;
+      z-index: 3;
+
+      filter: drop-shadow(12px 16px 0 rgba(54,26,15,.2));
+
+      animation: durgaFloat 5s ease-in-out infinite;
+    }
+
+    @keyframes durgaFloat {
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    .floating-flower {
+      position: absolute;
+      color: var(--red);
+      font-size: 2rem;
+      animation: flowerFloat 5s ease-in-out infinite;
+      z-index: 5;
+    }
+
+    .flower-one {
+      top: 15%;
+      left: 8%;
+    }
+
+    .flower-two {
+      right: 8%;
+      bottom: 20%;
+      animation-delay: 1s;
+    }
+
+    .flower-three {
+      right: 20%;
+      top: 10%;
+      animation-delay: 2s;
+    }
+
+    @keyframes flowerFloat {
+      50% {
+        transform: translateY(-20px) rotate(15deg);
+      }
+    }
+
+    /* ---------------- MARQUEE ---------------- */
+
+    .marquee {
+      overflow: hidden;
+
+      border-top: 3px solid var(--charcoal);
+      border-bottom: 3px solid var(--charcoal);
+
+      background: var(--red);
+      color: var(--cream);
+
+      white-space: nowrap;
+    }
+
+    .marquee-track {
+      display: inline-block;
+
+      padding: 14px 0;
+
+      font-family: "Noto Serif Bengali", serif;
+      font-size: .95rem;
+
+      animation: marquee 25s linear infinite;
+    }
+
+    .marquee-track span {
+      margin: 0 25px;
+    }
+
+    @keyframes marquee {
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* ---------------- COMMON SECTION ---------------- */
+
+    section {
+      padding: 110px 0;
+    }
+
+    .container {
+      width: min(1180px,92%);
+      margin: auto;
+    }
+
+    .section-label {
+      color: var(--red);
+
+      font-family: "DM Mono", monospace;
+      font-size: .7rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      margin-top: 10px;
+
+      font-size: clamp(2.5rem,6vw,5rem);
+      line-height: .9;
+      letter-spacing: -.06em;
+      text-transform: uppercase;
+    }
+
+    .section-intro {
+      max-width: 520px;
+      margin-top: 20px;
+
+      line-height: 1.7;
+    }
+
+    /* ---------------- MEMORIES ---------------- */
+
+    .memory-grid {
+      margin-top: 50px;
+
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 20px;
+    }
+
+    .memory-card {
+      min-height: 280px;
+
+      padding: 28px;
+
+      border: 3px solid var(--charcoal);
+      box-shadow: 7px 7px 0 var(--charcoal);
+
+      position: relative;
+      overflow: hidden;
+
+      transition: .25s;
+    }
+
+    .memory-card:hover {
+      transform: translateY(-8px) rotate(-1deg);
+    }
+
+    .memory-card:nth-child(1) {
+      background: #eee0bb;
+    }
+
+    .memory-card:nth-child(2) {
+      background: #dfb975;
+      transform: rotate(1deg);
+    }
+
+    .memory-card:nth-child(3) {
+      background: #cfd5bb;
+      transform: rotate(-1deg);
+    }
+
+    .memory-card:nth-child(4) {
+      background: #e5c1a1;
+    }
+
+    .memory-card:nth-child(5) {
+      background: #eee5c7;
+    }
+
+    .memory-card:nth-child(6) {
+      background: #d6b5a1;
+    }
+
+    .card-number {
+      font-family: "DM Mono", monospace;
+      font-size: .65rem;
+
+      border-bottom: 2px solid var(--charcoal);
+      padding-bottom: 10px;
+
+      margin-bottom: 25px;
+    }
+
+    .memory-card h3 {
+      font-family: "Noto Serif Bengali", serif;
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+    }
+
+    .memory-card p {
+      line-height: 1.65;
+      font-size: .9rem;
+    }
+
+    .card-doodle {
+      position: absolute;
+      right: 15px;
+      bottom: 5px;
+
+      font-family: Pacifico, cursive;
+      color: var(--red);
+      font-size: 2rem;
+
+      transform: rotate(-8deg);
+      opacity: .7;
+    }
+
+    /* ---------------- PANDAL ---------------- */
+
+    .pandal-section {
+      background: var(--green);
+      color: var(--cream);
+    }
+
+    .pandal-section .section-label {
+      color: var(--gold);
+    }
+
+    .pandal-grid {
+      margin-top: 50px;
+
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 18px;
+    }
+
+    .pandal {
+      height: 340px;
+
+      position: relative;
+
+      border: 3px solid var(--charcoal);
+      background: #34271f;
+
+      overflow: hidden;
+
+      transition: .3s;
+    }
+
+    .pandal:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 30px rgba(0,0,0,.3);
+    }
+
+    .pandal-name {
+      position: absolute;
+      left: 15px;
+      bottom: 15px;
+      z-index: 5;
+
+      background: var(--cream);
+      color: var(--charcoal);
+
+      padding: 8px 10px;
+
+      font-family: "DM Mono", monospace;
+      font-size: .65rem;
+
+      border: 2px solid var(--charcoal);
+    }
+
+    /* Pandal architecture */
+
+    .temple {
+      position: absolute;
+      left: 13%;
+      right: 13%;
+      bottom: 0;
+      height: 78%;
+      background: #c89135;
+
+      clip-path: polygon(
+        50% 0,
+        65% 20%,
+        75% 35%,
+        90% 55%,
+        100% 100%,
+        0 100%,
+        10% 55%,
+        25% 35%,
+        35% 20%
+      );
+
+      border-top: 5px solid #f0d08b;
+    }
+
+    .temple::after {
+      content: "";
+      position: absolute;
+
+      width: 28%;
+      height: 42%;
+
+      left: 36%;
+      bottom: 0;
+
+      background: var(--deep-red);
+    }
+
+    .bamboo {
+      position: absolute;
+      inset: 20px;
+
+      background:
+        repeating-linear-gradient(
+          45deg,
+          transparent 0 18px,
+          #bd8a43 19px 23px
+        );
+
+      border: 12px solid #9b6b35;
+    }
+
+    .geometric {
+      position: absolute;
+      inset: 30px;
+
+      background:
+        linear-gradient(45deg,transparent 45%,#c79c42 46% 54%,transparent 55%),
+        linear-gradient(-45deg,transparent 45%,#c79c42 46% 54%,transparent 55%);
+
+      border: 8px solid #e2c169;
+    }
+
+    .kolkata {
+      position: absolute;
+      left: 15%;
+      right: 15%;
+      bottom: 0;
+      height: 80%;
+
+      background: #a73c2e;
+
+      border: 8px solid #e6c47a;
+
+      box-shadow:
+        inset 0 0 0 20px #74241f,
+        inset 0 0 0 35px #d9b158;
+    }
+
+    /* ---------------- COUNTDOWN ---------------- */
+
+    .countdown-section {
+      background:
+        radial-gradient(circle at center, rgba(210,163,58,.25), transparent 45%),
+        var(--cream);
+      text-align: center;
+    }
+
+    .countdown {
+      margin-top: 40px;
+
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .count-box {
+      width: 125px;
+
+      padding: 20px 10px;
+
+      background: var(--paper);
+
+      border: 3px solid var(--charcoal);
+      box-shadow: 5px 5px 0 var(--charcoal);
+    }
+
+    .count-number {
+      display: block;
+
+      font-size: 2.5rem;
+      font-weight: 900;
+
+      color: var(--red);
+    }
+
+    .count-label {
+      font-family: "DM Mono", monospace;
+      font-size: .6rem;
+      letter-spacing: .1em;
+    }
+
+    #puja-date {
+      margin-top: 25px;
+
+      font-family: "Noto Serif Bengali", serif;
+      font-size: 1.2rem;
+      color: var(--green);
+    }
+
+    /* ---------------- FOOD ---------------- */
+
+    .food-section {
+      background: #e4c98f;
+    }
+
+    .food-grid {
+      margin-top: 50px;
+
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 18px;
+    }
+
+    .food-card {
+      padding: 25px;
+
+      min-height: 190px;
+
+      border: 3px solid var(--charcoal);
+      background: var(--paper);
+
+      box-shadow: 5px 5px 0 var(--charcoal);
+
+      transition: .2s;
+    }
+
+    .food-card:hover {
+      transform: rotate(-2deg) translateY(-5px);
+    }
+
+    .food-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    .food-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .food-card p {
+      font-size: .78rem;
+      line-height: 1.5;
+    }
+
+    /* ---------------- MUSIC ---------------- */
+
+    .music-section {
+      background: var(--charcoal);
+      color: var(--cream);
+    }
+
+    .music-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .cassette {
+      max-width: 500px;
+
+      padding: 25px;
+
+      background: #c6c0a8;
+
+      border: 4px solid #111;
+
+      box-shadow: 10px 10px 0 #111;
+
+      transform: rotate(-2deg);
+    }
+
+    .cassette-label {
+      height: 270px;
+
+      padding: 22px;
+
+      background: #eee0b5;
+
+      border: 3px solid #332c20;
+
+      color: var(--charcoal);
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .cassette-title {
+      font-family: "DM Mono", monospace;
+      font-size: .75rem;
+    }
+
+    .cassette-name {
+      font-family: Pacifico, cursive;
+      color: var(--red);
+      font-size: 2.4rem;
+      transform: rotate(-4deg);
+    }
+
+    .reels {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .reel {
+      width: 75px;
+      height: 75px;
+
+      border: 8px solid #34312a;
+      border-radius: 50%;
+
+      background:
+        repeating-conic-gradient(
+          #807867 0deg 10deg,
+          #bbb29a 10deg 20deg
+        );
+
+      box-shadow: inset 0 0 0 13px #aaa18a;
+    }
+
+    .music-copy h2 {
+      margin-top: 10px;
+    }
+
+    .music-copy p {
+      margin-top: 25px;
+      line-height: 1.8;
+    }
+
+    .music-buttons {
+      margin-top: 25px;
+
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* ---------------- QUOTE ---------------- */
+
+    .quote-section {
+      padding: 140px 20px;
+
+      background:
+        linear-gradient(rgba(103,28,25,.9),rgba(103,28,25,.9)),
+        radial-gradient(circle,#d19f35,#65201d);
+
+      color: var(--cream);
+
+      text-align: center;
+
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quote-section::before {
+      content: "শারদীয়া";
+
+      position: absolute;
+
+      font-family: "Noto Serif Bengali", serif;
+      font-size: 20rem;
+
+      left: -30px;
+      top: 10px;
+
+      opacity: .05;
+      white-space: nowrap;
+    }
+
+    blockquote {
+      position: relative;
+      z-index: 2;
+
+      max-width: 900px;
+      margin: auto;
+
+      font-size: clamp(2rem,5vw,5rem);
+      line-height: 1;
+
+      font-weight: 900;
+      letter-spacing: -.06em;
+    }
+
+    .quote-bengali {
+      margin-top: 30px;
+
+      font-family: "Noto Serif Bengali", serif;
+      font-size: clamp(1.3rem,3vw,2rem);
+
+      color: #e6bf60;
+    }
+
+    /* ---------------- PUJA DAY WELCOME ---------------- */
+
+    .puja-welcome {
+      margin-top: 35px;
+      padding: 22px 25px;
+      border: 3px solid var(--charcoal);
+      background: var(--paper);
+      box-shadow: 6px 6px 0 var(--charcoal);
+      text-align: center;
+      animation: welcomeGlow 2.5s ease-in-out infinite alternate;
+    }
+
+    .puja-welcome .welcome-small {
+      display: block;
+      font-family: "DM Mono", monospace;
+      font-size: .68rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: var(--red);
+    }
+
+    .puja-welcome .welcome-day {
+      display: block;
+      font-family: "Noto Serif Bengali", serif;
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      color: var(--green);
+    }
+
+    .puja-welcome .welcome-message {
+      display: block;
+      margin-top: 8px;
+      font-size: .9rem;
+      line-height: 1.6;
+    }
+
+    @keyframes welcomeGlow {
+      from { transform: rotate(-.4deg); }
+      to { transform: rotate(.4deg); }
+    }
+
+    /* ---------------- DHAK ---------------- */
+
+    .dhak-area {
+      margin-top: 50px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .dhak-button {
+      position: relative;
+
+      border: 3px solid var(--charcoal);
+      background: var(--gold);
+
+      color: var(--charcoal);
+
+      padding: 18px 25px;
+
+      font-family: "Noto Serif Bengali", serif;
+      font-size: 1rem;
+
+      cursor: pointer;
+
+      box-shadow: 6px 6px 0 var(--charcoal);
+      transition: .15s;
+    }
+
+    .dhak-button:hover {
+      transform: translateY(-3px);
+    }
+
+    .dhak-button:active {
+      transform: translate(5px,5px);
+      box-shadow: 1px 1px 0 var(--charcoal);
+    }
+
+    .dhak-playlist {
+      width: min(680px, 100%);
+      margin-top: 18px;
+      padding: 24px;
+      border: 3px solid var(--charcoal);
+      background: var(--cream);
+      color: var(--charcoal);
+      box-shadow: 7px 7px 0 var(--charcoal);
+      text-align: center;
+    }
+
+    .dhak-playlist h3 {
+      font-family: "Noto Serif Bengali", serif;
+      font-size: 1.6rem;
+      color: var(--red);
+      margin-bottom: 8px;
+    }
+
+    .dhak-playlist p {
+      font-size: .85rem;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .playlist-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .pulse {
+      animation: dhakPulse .4s ease;
+    }
+
+    @keyframes dhakPulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(210,163,58,.8);
+      }
+
+      100% {
+        box-shadow: 0 0 0 40px rgba(210,163,58,0);
+      }
+    }
+
+    /* ---------------- FOOTER ---------------- */
+
+    footer {
+      padding: 70px 0;
+
+      background: #181512;
+      color: var(--cream);
+
+      text-align: center;
+    }
+
+    .footer-title {
+      font-family: "Noto Serif Bengali", serif;
+      font-size: clamp(2.5rem,7vw,6rem);
+
+      color: var(--gold);
+    }
+
+    .footer-subtitle {
+      margin-top: 15px;
+
+      font-family: Pacifico, cursive;
+      font-size: 1.3rem;
+    }
+
+    .footer-line {
+      width: 100px;
+      height: 2px;
+
+      margin: 30px auto;
+
+      background: var(--gold);
+    }
+
+    .footer-small {
+      font-family: "DM Mono", monospace;
+      font-size: .6rem;
+
+      opacity: .6;
+    }
+
+    /* ---------------- REVEAL ---------------- */
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(35px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+
+    .reveal.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---------------- RESPONSIVE ---------------- */
+
+    @media(max-width:900px) {
+
+      .hero-container,
+      .music-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .durga-stage {
+        height: 500px;
+        order: -1;
+      }
+
+      .memory-grid {
+        grid-template-columns: repeat(2,1fr);
+      }
+
+      .pandal-grid {
+        grid-template-columns: repeat(2,1fr);
+      }
+
+      .food-grid {
+        grid-template-columns: repeat(2,1fr);
+      }
+    }
+
+    @media(max-width:600px) {
+
+      nav ul {
+        gap: 12px;
+      }
+
+      nav a {
+        font-size: .6rem;
+      }
+
+      .logo {
+        font-size: .6rem;
+      }
+
+      .hero {
+        padding-top: 90px;
+      }
+
+      .hero-container {
+        min-height: auto;
+        padding: 60px 0;
+      }
+
+      .durga-stage {
+        height: 390px;
+      }
+
+      .halo {
+        width: 300px;
+        height: 300px;
+      }
+
+      .memory-grid,
+      .pandal-grid,
+      .food-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pandal {
+        height: 280px;
+      }
+
+      .count-box {
+        width: 100px;
+      }
+
+      .music-layout {
+        gap: 45px;
+      }
+
+      .cassette {
+        width: 100%;
+      }
+
+      section {
+        padding: 80px 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav>
+  <div class="nav-container">
+
+    <div class="logo">
+      <div class="logo-box">PUJO</div>
+      KOLKATA MEMORIES
+    </div>
+
+    <ul>
+      <li><a href="#memories">Memories</a></li>
+      <li><a href="#pandal">Pandal</a></li>
+      <li><a href="#food">Food</a></li>
+      <li><a href="#music">Music</a></li>
+    </ul>
+
+  </div>
+</nav>
+
+
+<!-- ================= HERO ================= -->
+
+<header class="hero">
+
+  <div class="hero-container">
+
+    <div class="hero-text">
+
+      <div class="eyebrow">
+        <span>●</span> KOLKATA • AUTUMN • PUJO
+      </div>
+
+      <h1>
+        PUJO
+        <span>ELO</span>
+      </h1>
+
+      <div class="bengali-title">
+        শারদীয়া
+      </div>
+
+      <p class="hero-description">
+        The streets glow. The dhaak begins.
+        New clothes wait in the cupboard.
+        Somewhere nearby, incense rises into the evening air.
+        And suddenly, Kolkata feels like childhood again.
+      </p>
+
+      <div class="hero-buttons">
+
+        <a href="#memories" class="btn btn-red">
+          ENTER THE MEMORY ↓
+        </a>
+
+        <a href="#music" class="btn btn-paper">
+          PLAY THE MIXTAPE
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <!-- DURGA ART -->
+
+    <div class="durga-stage">
+
+      <div class="halo"></div>
+
+      <div class="floating-flower flower-one">✿</div>
+      <div class="floating-flower flower-two">✿</div>
+      <div class="floating-flower flower-three">✿</div>
+
+      <svg
+        class="durga-art"
+        viewBox="0 0 500 600"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+
+        <!-- Crown -->
+        <path
+          d="M145 190 L175 75 L215 130 L250 45 L285 130 L325 75 L355 190 Z"
+          fill="#d2a33a"
+          stroke="#211d1a"
+          stroke-width="6"
+        />
+
+        <circle cx="250" cy="110" r="12" fill="#a52f27"/>
+
+        <!-- Hair -->
+        <path
+          d="
+          M125 205
+          Q100 260 120 400
+          Q135 500 250 555
+          Q365 500 380 400
+          Q400 260 375 205
+          Q340 165 250 165
+          Q160 165 125 205
+          "
+          fill="#3b201d"
+          stroke="#211d1a"
+          stroke-width="7"
+        />
+
+        <!-- Face -->
+        <path
+          d="
+          M165 205
+          Q250 165 335 205
+          L320 360
+          Q300 425 250 445
+          Q200 425 180 360
+          Z
+          "
+          fill="#d99068"
+          stroke="#211d1a"
+          stroke-width="6"
+        />
+
+        <!-- Third eye -->
+        <path
+          d="M232 245 Q250 225 268 245 Q250 265 232 245"
+          fill="#fff0c7"
+          stroke="#211d1a"
+          stroke-width="4"
+        />
+
+        <circle cx="250" cy="245" r="6" fill="#a52f27"/>
+
+        <!-- Eyes -->
+        <path
+          d="M190 295 Q215 270 238 295 Q215 310 190 295"
+          fill="#fff4d2"
+          stroke="#211d1a"
+          stroke-width="5"
+        />
+
+        <path
+          d="M262 295 Q285 270 310 295 Q285 310 262 295"
+          fill="#fff4d2"
+          stroke="#211d1a"
+          stroke-width="5"
+        />
+
+        <circle cx="216" cy="293" r="6" fill="#211d1a"/>
+        <circle cx="284" cy="293" r="6" fill="#211d1a"/>
+
+        <!-- Bindi -->
+        <circle
+          cx="250"
+          cy="282"
+          r="9"
+          fill="#a52f27"
+        />
+
+        <!-- Nose -->
+        <path
+          d="M250 300 Q240 335 252 340"
+          fill="none"
+          stroke="#7b4533"
+          stroke-width="5"
+        />
+
+        <!-- Smile -->
+        <path
+          d="M220 360 Q250 382 280 360"
+          fill="none"
+          stroke="#651d1b"
+          stroke-width="6"
+          stroke-linecap="round"
+        />
+
+        <!-- Earrings -->
+        <circle
+          cx="172"
+          cy="335"
+          r="24"
+          fill="#d2a33a"
+          stroke="#211d1a"
+          stroke-width="5"
+        />
+
+        <circle
+          cx="328"
+          cy="335"
+          r="24"
+          fill="#d2a33a"
+          stroke="#211d1a"
+          stroke-width="5"
+        />
+
+        <!-- Necklace -->
+        <path
+          d="M165 400 Q250 470 335 400"
+          fill="none"
+          stroke="#d2a33a"
+          stroke-width="18"
+        />
+
+        <path
+          d="M190 425 Q250 490 310 425"
+          fill="none"
+          stroke="#a52f27"
+          stroke-width="12"
+        />
+
+        <!-- Decorative lotus -->
+        <path
+          d="
+          M250 500
+          C220 470 185 490 200 525
+          C215 550 250 545 250 545
+          C250 545 285 550 300 525
+          C315 490 280 470 250 500
+          "
+          fill="#a52f27"
+          stroke="#211d1a"
+          stroke-width="5"
+        />
+
+      </svg>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- ================= MARQUEE ================= -->
+
+<div class="marquee">
+
+  <div class="marquee-track">
+
+    <span>পুজো এসে গেছে</span>
+    <span>ঢাক বাজছে</span>
+    <span>চলো প্যান্ডেল দেখি</span>
+    <span>অঞ্জলি দেবি?</span>
+    <span>আজ ভোগ খাবি?</span>
+    <span>শুভ বিজয়া</span>
+    <span>আবার আসছে বছর</span>
+
+    <span>পুজো এসে গেছে</span>
+    <span>ঢাক বাজছে</span>
+    <span>চলো প্যান্ডেল দেখি</span>
+    <span>অঞ্জলি দেবি?</span>
+    <span>আজ ভোগ খাবি?</span>
+    <span>শুভ বিজয়া</span>
+    <span>আবার আসছে বছর</span>
+
+  </div>
+
+</div>
+
+
+<!-- ================= MEMORIES ================= -->
+
+<section id="memories">
+
+  <div class="container reveal">
+
+    <div class="section-label">
+      01 / PUJA MEMORIES
+    </div>
+
+    <h2 class="section-title">
+      Things we<br>remember
+    </h2>
+
+    <p class="section-intro">
+      Pujo was never only about the idol.
+      It was the small things around it that stayed with us.
+    </p>
+
+
+    <div class="memory-grid">
+
+      <article class="memory-card">
+
+        <div class="card-number">01 — NEW CLOTHES</div>
+
+        <h3>নতুন জামা</h3>
+
+        <p>
+          The smell of a brand-new dress,
+          carefully kept inside the cupboard,
+          waiting for Saptami morning.
+        </p>
+
+        <div class="card-doodle">new!</div>
+
+      </article>
+
+
+      <article class="memory-card">
+
+        <div class="card-number">02 — NIGHT WALK</div>
+
+        <h3>প্যান্ডেল হপিং</h3>
+
+        <p>
+          One pandal became five.
+          Five became ten.
+          And somehow nobody wanted to go home.
+        </p>
+
+        <div class="card-doodle">আর একটা?</div>
+
+      </article>
+
+
+      <article class="memory-card">
+
+        <div class="card-number">03 — SOUND</div>
+
+        <h3>ঢাকের আওয়াজ</h3>
+
+        <p>
+          Before you saw the Puja,
+          you heard it.
+          That unmistakable rhythm floating through the para.
+        </p>
+
+        <div class="card-doodle">ধুম!</div>
+
+      </article>
+
+
+      <article class="memory-card">
+
+        <div class="card-number">04 — EVENING</div>
+
+        <h3>ধুনুচি নাচ</h3>
+
+        <p>
+          Smoke, lights, dhaak and dancing.
+          The entire pandal seemed to breathe
+          with the rhythm.
+        </p>
+
+        <div class="card-doodle">আহা!</div>
+
+      </article>
+
+
+      <article class="memory-card">
+
+        <div class="card-number">05 — MORNING</div>
+
+        <h3>অষ্টমীর অঞ্জলি</h3>
+
+        <p>
+          Shiuli flowers, incense,
+          conch shells and sleepy mornings
+          that somehow felt sacred.
+        </p>
+
+        <div class="card-doodle">শুভ সকাল</div>
+
+      </article>
+
+
+      <article class="memory-card">
+
+        <div class="card-number">06 — GOODBYE</div>
+
+        <h3>বিজয়ার কষ্ট</h3>
+
+        <p>
+          The lights come down.
+          The dhaak becomes quieter.
+          And everyone says:
+          "আবার আসছে বছর."
+        </p>
+
+        <div class="card-doodle">see you...</div>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= PANDAL ================= -->
+
+<section id="pandal" class="pandal-section">
+
+  <div class="container reveal">
+
+    <div class="section-label">
+      02 / PANDAL NIGHTS
+    </div>
+
+    <h2 class="section-title">
+      Kolkata<br>after dark
+    </h2>
+
+    <p class="section-intro">
+      Every para has a story.
+      Every pandal has its own personality.
+      At night, the whole city becomes a gallery.
+    </p>
+
+
+    <div class="pandal-grid">
+
+      <div class="pandal">
+        <div class="temple"></div>
+        <div class="pandal-name">TRADITIONAL PARA</div>
+      </div>
+
+      <div class="pandal">
+        <div class="geometric"></div>
+        <div class="pandal-name">MODERN ART</div>
+      </div>
+
+      <div class="pandal">
+        <div class="bamboo"></div>
+        <div class="pandal-name">BAMBOO STORY</div>
+      </div>
+
+      <div class="pandal">
+        <div class="kolkata"></div>
+        <div class="pandal-name">OLD KOLKATA</div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= COUNTDOWN ================= -->
+
+<section class="countdown-section">
+
+  <div class="container reveal">
+
+    <div class="section-label">
+      03 / WAITING FOR PUJO
+    </div>
+
+    <h2 class="section-title">
+      আর কতদিন?
+    </h2>
+
+    <p class="section-intro" style="margin-left:auto;margin-right:auto;">
+      The waiting is part of the festival.
+      New clothes, plans, pandal maps and that one question:
+      "পুজো কবে?"
+    </p>
+
+    <div class="puja-welcome" id="pujaWelcome">
+      <span class="welcome-small">PUJO STATUS</span>
+      <span class="welcome-day">পুজো আসছে...</span>
+      <span class="welcome-message">শিউলি, ধুনুচি আর ঢাকের অপেক্ষা চলছে ❤️</span>
+    </div>
+
+    <div class="countdown">
+
+      <div class="count-box">
+        <span id="days" class="count-number">00</span>
+        <span class="count-label">DAYS</span>
+      </div>
+
+      <div class="count-box">
+        <span id="hours" class="count-number">00</span>
+        <span class="count-label">HOURS</span>
+      </div>
+
+      <div class="count-box">
+        <span id="minutes" class="count-number">00</span>
+        <span class="count-label">MINUTES</span>
+      </div>
+
+      <div class="count-box">
+        <span id="seconds" class="count-number">00</span>
+        <span class="count-label">SECONDS</span>
+      </div>
+
+    </div>
+
+    <div id="puja-date">
+      Next Puja loading...
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= FOOD ================= -->
+
+<section id="food" class="food-section">
+
+  <div class="container reveal">
+
+    <div class="section-label">
+      04 / PUJOR KHABAR
+    </div>
+
+    <h2 class="section-title">
+      First<br>eat.
+    </h2>
+
+    <p class="section-intro">
+      Because no Puja memory is complete without food.
+    </p>
+
+
+    <div class="food-grid">
+
+      <div class="food-card">
+        <div class="food-icon">🍲</div>
+        <h3>Bhoger Khichuri</h3>
+        <p>
+          Warm, simple and somehow better
+          when eaten beside the pandal.
+        </p>
+      </div>
+
+
+      <div class="food-card">
+        <div class="food-icon">🥘</div>
+        <h3>Labra</h3>
+        <p>
+          The perfect companion to
+          a plate of bhoger khichuri.
+        </p>
+      </div>
+
+
+      <div class="food-card">
+        <div class="food-icon">🍆</div>
+        <h3>Beguni</h3>
+        <p>
+          Crispy outside, soft inside —
+          festival comfort food.
+        </p>
+      </div>
+
+
+      <div class="food-card">
+        <div class="food-icon">🫓</div>
+        <h3>Luchi</h3>
+        <p>
+          Especially dangerous when
+          there is alur dum nearby.
+        </p>
+      </div>
+
+
+      <div class="food-card">
+        <div class="food-icon">🥔</div>
+        <h3>Alur Dum</h3>
+        <p>
+          The childhood combination
+          that needs no explanation.
+        </p>
+      </div>
+
+
+      <div class="food-card">
+        <div class="food-icon">🍬</div>
+        <h3>Mishti</h3>
+        <p>
+          Because one sweet is never
+          really enough during Puja.
+        </p>
+      </div>
+
+
+      <div class="food-card">
+        <div class="food-icon">🍚</div>
+        <h3>Payesh</h3>
+        <p>
+          Sweet, nostalgic and made
+          for special occasions.
+        </p>
+      </div>
+
+
+      <div class="food-card">
+        <div class="food-icon">🥣</div>
+        <h3>Phuchka</h3>
+        <p>
+          Pandal hopping calories
+          don't count.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= MUSIC ================= -->
+
+<section id="music" class="music-section">
+
+  <div class="container music-layout reveal">
+
+    <div class="cassette">
+
+      <div class="cassette-label">
+
+        <div class="cassette-title">
+          PUJO MIXTAPE / DHAK & GAAN
+        </div>
+
+        <div class="cassette-name">
+          Dhak & Pujor Gaan
+        </div>
+
+        <div class="reels">
+
+          <div class="reel"></div>
+
+          <div
+            style="
+              width:100px;
+              height:25px;
+              background:#6d614d;
+              border:3px solid #211d1a;
+            "
+          ></div>
+
+          <div class="reel"></div>
+
+        </div>
+
+        <div
+          style="
+            font-family:'DM Mono';
+            font-size:.6rem;
+            display:flex;
+            justify-content:space-between;
+          "
+        >
+          <span>SIDE A</span>
+          <span>45:00</span>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="music-copy">
+
+      <div class="section-label">
+        05 / PUJOR MIXTAPE
+      </div>
+
+      <h2 class="section-title">
+        Music for<br>the ride
+      </h2>
+
+      <p>
+        Imagine the city outside the window.
+        Lights passing by.
+        Someone laughing behind you.
+        Dhaak somewhere in the distance.
+        Put on the music and let Kolkata move.
+      </p>
+
+
+      <div class="music-buttons">
+
+        <a
+          class="btn btn-red"
+          href="https://youtube.com/playlist?list=PLHo2eSz8CDF8&si=nb0xCCrTN4_eL-C8"
+          target="_blank"
+          rel="noopener"
+        >
+          ▶ OPEN PLAYLIST
+        </a>
+
+        <button
+          class="dhak-button"
+          id="dhakButton"
+        >
+          ঢাক বাজাও 🥁
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= QUOTE ================= -->
+
+<section class="quote-section reveal">
+
+  <blockquote>
+    Some festivals are celebrated.<br>
+    Some festivals are remembered.
+  </blockquote>
+
+  <div class="quote-bengali">
+    পুজো মানেই বাড়ি ফেরার গন্ধ।
+  </div>
+
+</section>
+
+
+<!-- ================= DHAK PLAYLIST ================= -->
+
+<section style="background:#eee0ba;text-align:center;">
+
+  <div class="container reveal">
+
+    <div class="section-label">
+      ONE LAST THING
+    </div>
+
+    <h2 class="section-title">
+      Let the dhaak play...
+    </h2>
+
+    <p class="section-intro" style="margin:25px auto;">
+      Close your eyes for a second.
+      Imagine the lights.
+      Hear the dhaak.
+      Smell the incense.
+      And let the Pujo playlist take you back home.
+    </p>
+
+    <div class="dhak-area">
+
+      <button
+        class="dhak-button"
+        id="bigDhak"
+      >
+        ঢাক বাজাও 🥁
+      </button>
+
+      <div
+        id="dhakMessage"
+        style="
+          font-family:'Noto Serif Bengali';
+          color:#a52f27;
+        "
+      >
+        একটু জোরে বাজাও!
+      </div>
+
+      <div class="dhak-playlist">
+        <h3>🥁 ঢাকের Playlist</h3>
+        <p>
+          Pujor dhaak, agomoni, dhunuchi vibes আর সেই কলকাতার
+          পুজোর রাত — সব একসাথে শুনুন।
+        </p>
+
+        <div class="playlist-buttons">
+          <a
+            class="btn btn-red"
+            href="https://youtube.com/playlist?list=PLHo2eSz8CDF8&si=nb0xCCrTN4_eL-C8"
+            target="_blank"
+            rel="noopener"
+          >
+            ▶ PLAY PUJO PLAYLIST
+          </a>
+
+          <a
+            class="btn btn-paper"
+            href="#music"
+          >
+            🎵 PUJOR GAAN
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+  <div class="container">
+
+    <div class="footer-title">
+      আবার আসছে বছর
+    </div>
+
+    <div class="footer-subtitle">
+      Until the dhaak calls again.
+    </div>
+
+    <div class="footer-line"></div>
+
+    <a
+      class="btn btn-red"
+      href="https://youtube.com/playlist?list=PLHo2eSz8CDF8&si=nb0xCCrTN4_eL-C8"
+      target="_blank"
+      rel="noopener"
+    >
+      🎵 PUJO PLAYLIST
+    </a>
+
+    <br><br>
+
+    <div class="footer-small">
+      A DIGITAL MEMORY OF KOLKATA PUJA
+      <br>
+      শারদীয়া • আগমনী • বিজয়া
+    </div>
+
+  </div>
+
+</footer>
+
+
+<script>
+
+  /* =====================================================
+     PUJA COUNTDOWN + DAILY WELCOME
+     2026 Kolkata / West Bengal Puja days
+  ===================================================== */
+
+  const pujaDays = [
+    {
+      key: "saptami",
+      date: "2026-10-18T00:00:00",
+      end: "2026-10-19T00:00:00",
+      title: "শুভ মহা সপ্তমী",
+      english: "Maha Saptami",
+      message: "কলাবউ স্নান, নতুন জামা আর প্রথম পুজোর আনন্দে আজ মনটা একেবারে পুজো-পুজো! 🌸"
+    },
+    {
+      key: "ashtami",
+      date: "2026-10-19T00:00:00",
+      end: "2026-10-20T00:00:00",
+      title: "শুভ মহা অষ্টমী",
+      english: "Maha Ashtami",
+      message: "পুষ্পাঞ্জলি, ধুনুচি নাচ আর ঢাকের তালে — আজ পুজোর সবচেয়ে আবেগের দিন। ❤️"
+    },
+    {
+      key: "navami",
+      date: "2026-10-20T00:00:00",
+      end: "2026-10-21T00:00:00",
+      title: "শুভ মহা নবমী",
+      english: "Maha Navami",
+      message: "ধুনুচির ধোঁয়া, আরতির আলো আর ভোগের গন্ধে আজ পুজোর রাত আরও জমে উঠুক। ✨"
+    },
+    {
+      key: "dashami",
+      date: "2026-10-21T00:00:00",
+      end: "2026-10-22T00:00:00",
+      title: "শুভ বিজয়া দশমী",
+      english: "Vijaya Dashami",
+      message: "চোখে জল, মুখে হাসি — মা-কে বিদায় দিয়ে বলি, আবার আসছে বছর। ❤️"
+    }
+  ];
+
+  function getPujaStatus() {
+    const now = new Date();
+
+    for (const day of pujaDays) {
+      const start = new Date(day.date);
+      const end = new Date(day.end);
+
+      if (now >= start && now < end) {
+        return {
+          mode: "today",
+          day,
+          target: end
+        };
+      }
+    }
+
+    const next = pujaDays.find(day => new Date(day.date) > now);
+
+    if (next) {
+      return {
+        mode: "waiting",
+        day: next,
+        target: new Date(next.date)
+      };
+    }
+
+    return {
+      mode: "finished",
+      day: pujaDays[0],
+      target: new Date("2027-10-08T00:00:00")
+    };
+  }
+
+  function updatePujaExperience() {
+    const status = getPujaStatus();
+    const now = new Date();
+    const difference = status.target - now;
+
+    const welcome = document.getElementById("pujaWelcome");
+    const welcomeDay = welcome.querySelector(".welcome-day");
+    const welcomeMessage = welcome.querySelector(".welcome-message");
+    const welcomeSmall = welcome.querySelector(".welcome-small");
+
+    if (status.mode === "today") {
+      welcomeSmall.textContent = "TODAY'S PUJO";
+      welcomeDay.textContent = status.day.title;
+      welcomeMessage.textContent = status.day.message;
+
+      document.getElementById("days").textContent = "00";
+      document.getElementById("hours").textContent = "00";
+      document.getElementById("minutes").textContent = "00";
+      document.getElementById("seconds").textContent = "00";
+
+      document.getElementById("puja-date").textContent =
+        `${status.day.english} — আজ পুজোর দিন ❤️`;
+
+      return;
+    }
+
+    if (status.mode === "finished") {
+      welcomeSmall.textContent = "PUJO MEMORIES";
+      welcomeDay.textContent = "শুভ বিজয়া";
+      welcomeMessage.textContent = "আবার আসছে বছর! মা আবার আসবেন। ❤️";
+    } else {
+      welcomeSmall.textContent = "NEXT PUJO DAY";
+      welcomeDay.textContent = `পরের দিন — ${status.day.title}`;
+      welcomeMessage.textContent =
+        `${status.day.english} আসছে। প্রস্তুতি শুরু হোক! 🌸`;
+    }
+
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((difference / (1000 * 60)) % 60);
+    const seconds = Math.floor((difference / 1000) % 60);
+
+    document.getElementById("days").textContent =
+      String(Math.max(days, 0)).padStart(2, "0");
+
+    document.getElementById("hours").textContent =
+      String(Math.max(hours, 0)).padStart(2, "0");
+
+    document.getElementById("minutes").textContent =
+      String(Math.max(minutes, 0)).padStart(2, "0");
+
+    document.getElementById("seconds").textContent =
+      String(Math.max(seconds, 0)).padStart(2, "0");
+
+    document.getElementById("puja-date").textContent =
+      `পরের পুজো: ${status.day.english} — ${status.day.date.slice(0, 10)}`;
+  }
+
+  updatePujaExperience();
+  setInterval(updatePujaExperience, 1000);
+
+
+  /* =====================================================
+     DHAK SOUND USING WEB AUDIO API
+  ===================================================== */
+
+  function playDhak(button, messageElement = null) {
+
+    const AudioContext =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+    if (!AudioContext) {
+      return;
+    }
+
+    const audioContext = new AudioContext();
+
+    const now = audioContext.currentTime;
+
+
+    /*
+      Create a low-frequency drum-like sound.
+    */
+
+    function drum(
+      startTime,
+      frequency,
+      duration,
+      volume
+    ) {
+
+      const oscillator =
+        audioContext.createOscillator();
+
+      const gain =
+        audioContext.createGain();
+
+      oscillator.type = "sine";
+
+      oscillator.frequency.setValueAtTime(
+        frequency,
+        startTime
+      );
+
+      oscillator.frequency.exponentialRampToValueAtTime(
+        frequency * .35,
+        startTime + duration
+      );
+
+
+      gain.gain.setValueAtTime(
+        .0001,
+        startTime
+      );
+
+      gain.gain.exponentialRampToValueAtTime(
+        volume,
+        startTime + .015
+      );
+
+      gain.gain.exponentialRampToValueAtTime(
+        .0001,
+        startTime + duration
+      );
+
+
+      oscillator.connect(gain);
+      gain.connect(audioContext.destination);
+
+      oscillator.start(startTime);
+      oscillator.stop(startTime + duration);
+    }
+
+
+    drum(now, 100, .38, .65);
+    drum(now + .22, 140, .28, .45);
+    drum(now + .45, 90, .42, .7);
+    drum(now + .75, 125, .3, .5);
+
+
+    /*
+      Visual pulse
+    */
+
+    button.classList.remove("pulse");
+
+    void button.offsetWidth;
+
+    button.classList.add("pulse");
+
+
+    const originalText = button.textContent;
+
+    button.textContent = "ঢাক বাজছে! 🥁";
+
+
+    if (messageElement) {
+      messageElement.textContent =
+        "ধুম ধুম ধুম! 🥁";
+    }
+
+
+    setTimeout(() => {
+
+      button.textContent = originalText;
+
+      if (messageElement) {
+        messageElement.textContent =
+          "আবার বাজাও!";
+      }
+
+    },1200);
+
+  }
+
+
+  document
+    .getElementById("dhakButton")
+    .addEventListener("click", function() {
+
+      playDhak(this);
+
+    });
+
+
+  document
+    .getElementById("bigDhak")
+    .addEventListener("click", function() {
+
+      playDhak(
+        this,
+        document.getElementById("dhakMessage")
+      );
+
+    });
+
+
+  /* =====================================================
+     SCROLL REVEAL
+  ===================================================== */
+
+  const revealElements =
+    document.querySelectorAll(".reveal");
+
+
+  const revealObserver =
+    new IntersectionObserver(
+      function(entries) {
+
+        entries.forEach(
+          function(entry) {
+
+            if (entry.isIntersecting) {
+
+              entry.target.classList.add("show");
+
+              revealObserver.unobserve(
+                entry.target
+              );
+
+            }
+
+          }
+        );
+
+      },
+      {
+        threshold: .12
+      }
+    );
+
+
+  revealElements.forEach(
+    element => revealObserver.observe(element)
+  );
+
+
+  /* =====================================================
+     HERO PARALLAX
+  ===================================================== */
+
+  const durga =
+    document.querySelector(".durga-art");
+
+
+  window.addEventListener(
+    "mousemove",
+    function(event) {
+
+      if (window.innerWidth < 900) {
+        return;
+      }
+
+      const x =
+        (event.clientX / window.innerWidth - .5) * 8;
+
+      const y =
+        (event.clientY / window.innerHeight - .5) * 6;
+
+      durga.style.transform =
+        `translate(${x}px,${y}px)`;
+
+    }
+  );
+
+
+  window.addEventListener(
+    "mouseleave",
+    function() {
+
+      durga.style.transform = "";
+
+    }
+  );
+
+
+  /* =====================================================
+     FLOATING PUJA PARTICLES
+  ===================================================== */
+
+  function createParticle() {
+
+    const particle =
+      document.createElement("div");
+
+    particle.innerHTML =
+      Math.random() > .5 ? "✿" : "•";
+
+    particle.style.position =
+      "fixed";
+
+    particle.style.left =
+      Math.random() * 100 + "vw";
+
+    particle.style.top =
+      "-20px";
+
+    particle.style.zIndex =
+      "20";
+
+    particle.style.pointerEvents =
+      "none";
+
+    particle.style.color =
+      Math.random() > .5
+        ? "#a52f27"
+        : "#d2a33a";
+
+    particle.style.fontSize =
+      Math.random() * 12 + 8 + "px";
+
+    particle.style.opacity =
+      Math.random() * .5 + .3;
+
+    document.body.appendChild(particle);
+
+
+    const duration =
+      Math.random() * 5000 + 5000;
+
+
+    particle.animate(
+      [
+        {
+          transform:
+            "translateY(0) rotate(0deg)"
+        },
+        {
+          transform:
+            `translateY(110vh) rotate(360deg)`
+        }
+      ],
+      {
+        duration: duration,
+        easing: "linear"
+      }
+    );
+
+
+    setTimeout(
+      () => particle.remove(),
+      duration
+    );
+
+  }
+
+
+  setInterval(
+    createParticle,
+    900
+  );
+
+
+</script>
+
+</body>
+</html>
